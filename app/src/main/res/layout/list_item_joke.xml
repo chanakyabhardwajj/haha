@@ -1,20 +1,31 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:gravity="center_vertical"
-    android:minHeight="?android:attr/listPreferredItemHeight"
-    android:orientation="vertical">
+    android:minHeight="?android:attr/listPreferredItemHeight">
 
-    <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:id="@+id/list_item_joke_title_view" />
 
-    <TextView xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:id="@+id/list_item_joke_text_view" />
+        android:background="@drawable/joke_background"
+        android:minHeight="?android:attr/listPreferredItemHeight"
+        android:orientation="vertical">
 
-</LinearLayout>
+        <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/list_item_joke_view"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left|center_vertical"
+            android:layout_weight="1"
+            android:background="@color/accent_primary"
+            android:minHeight="?android:attr/listPreferredItemHeight"
+            android:padding="10dp"
+            android:paddingTop="20dp"
+            android:text="sample textttt"
+            android:textColor="@android:color/white"
+            android:textSize="18sp" />
+
+    </LinearLayout>
+
+</FrameLayout>
+

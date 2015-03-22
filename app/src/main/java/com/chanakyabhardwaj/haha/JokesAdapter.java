@@ -2,7 +2,6 @@ package com.chanakyabhardwaj.haha;
 
 import android.content.Context;
 import android.database.Cursor;
-import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,9 +19,12 @@ public class JokesAdapter extends CursorAdapter {
         super(context, c, flags);
     }
 
+    private int counter = 0;
+
     @Override
     public View newView(Context context, Cursor cursor, ViewGroup parent) {
-        return LayoutInflater.from(context).inflate(R.layout.list_item_joke, parent, false);
+        View newView =  LayoutInflater.from(context).inflate(R.layout.list_item_joke, parent, false);
+        return newView;
     }
 
     @Override
@@ -30,13 +32,21 @@ public class JokesAdapter extends CursorAdapter {
         int idx_jokes_title = cursor.getColumnIndex(JokesContract.JokesEntry.COLUMN_JOKE_TITLE);
         String jokeTitle = cursor.getString(idx_jokes_title);
 
-        TextView jokeTitleView = (TextView) view.findViewById(R.id.list_item_joke_title_view);
-        jokeTitleView.setText(jokeTitle);
-
         int idx_jokes_text = cursor.getColumnIndex(JokesContract.JokesEntry.COLUMN_JOKE_TEXT);
         String jokeText = cursor.getString(idx_jokes_text);
 
-        TextView jokeTextView = (TextView) view.findViewById(R.id.list_item_joke_text_view);
-        jokeTextView.setText(Html.fromHtml(jokeText));
+
+        TextView jokeTitleView = (TextView) view.findViewById(R.id.list_item_joke_view);
+        jokeTitleView.setText(jokeTitle + " \n " + jokeText);
+
+
+        if (counter%2 == 1) {
+            jokeTitleView.setBackgroundColor(context.getResources().getColor(R.color.default_primary));
+        } else {
+            jokeTitleView.setBackgroundColor(context.getResources().getColor(R.color.accent_primary));
+        }
+
+        counter = counter+1;
+
     }
 }
