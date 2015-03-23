@@ -6,8 +6,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-
-        android:background="@drawable/joke_background"
+        android:background="@drawable/bean"
         android:minHeight="?android:attr/listPreferredItemHeight"
         android:orientation="vertical">
 
@@ -17,13 +16,20 @@
             android:layout_height="wrap_content"
             android:layout_gravity="left|center_vertical"
             android:layout_weight="1"
-            android:background="@color/accent_primary"
             android:minHeight="?android:attr/listPreferredItemHeight"
-            android:padding="10dp"
-            android:paddingTop="20dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="30dp"
+            android:paddingBottom="30dp"
+            android:shadowColor="#FFFFFF"
+            android:shadowDx="-2"
+            android:shadowDy="2"
+            android:shadowRadius="0.01"
             android:text="sample textttt"
-            android:textColor="@android:color/white"
-            android:textSize="18sp" />
+            android:textColor="#333333"
+            android:textSize="14sp"
+
+            android:fontFamily="sans-serif-thin"/>
 
     </LinearLayout>
 

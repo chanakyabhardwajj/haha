@@ -2,6 +2,7 @@ package com.chanakyabhardwaj.haha;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,7 @@ public class JokesAdapter extends CursorAdapter {
     }
 
     private int counter = 0;
+    private Drawable backgroundImage;
 
     @Override
     public View newView(Context context, Cursor cursor, ViewGroup parent) {
@@ -42,9 +44,12 @@ public class JokesAdapter extends CursorAdapter {
 
         if (counter%2 == 1) {
             jokeTitleView.setBackgroundColor(context.getResources().getColor(R.color.default_primary));
+            jokeTitleView.getBackground().setAlpha(50);
+            //jokeTitleView.setBackgroundResource(R.drawable.bean);
         } else {
-            jokeTitleView.setBackgroundColor(context.getResources().getColor(R.color.accent_primary));
+            //jokeTitleView.setBackgroundResource(R.drawable.freddie);
         }
+
 
         counter = counter+1;
 

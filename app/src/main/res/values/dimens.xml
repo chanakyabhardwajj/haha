@@ -7,5 +7,4 @@
     <dimen name="joke_padding">10dp</dimen>
     <dimen name="joke_corner_radius">3dp</dimen>
     <dimen name="joke_border_width">1dp</dimen>
-
 </resources>
