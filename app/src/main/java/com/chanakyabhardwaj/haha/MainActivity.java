@@ -81,7 +81,7 @@ public class MainActivity extends FragmentActivity implements LoaderManager.Load
             String jokeTitle = "fake joke title " + position;
             String jokeText = "fake joke text " + position;
 
-            if(mJokesCursor != null && mJokesCursor.getCount() > 0) {
+            if (mJokesCursor != null && mJokesCursor.getCount() > 0) {
                 mJokesCursor.moveToPosition(position);
                 int idx_jokes_title = mJokesCursor.getColumnIndex(JokesContract.JokesEntry.COLUMN_JOKE_TITLE);
                 jokeTitle = mJokesCursor.getString(idx_jokes_title);

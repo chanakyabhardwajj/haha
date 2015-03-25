@@ -25,7 +25,7 @@ public class JokesAdapter extends CursorAdapter {
 
     @Override
     public View newView(Context context, Cursor cursor, ViewGroup parent) {
-        View newView =  LayoutInflater.from(context).inflate(R.layout.list_item_joke, parent, false);
+        View newView = LayoutInflater.from(context).inflate(R.layout.list_item_joke, parent, false);
         return newView;
     }
 
@@ -42,7 +42,7 @@ public class JokesAdapter extends CursorAdapter {
         jokeTitleView.setText(jokeTitle + " \n " + jokeText);
 
 
-        if (counter%2 == 1) {
+        if (counter % 2 == 1) {
             jokeTitleView.setBackgroundColor(context.getResources().getColor(R.color.default_primary));
             jokeTitleView.getBackground().setAlpha(50);
             //jokeTitleView.setBackgroundResource(R.drawable.bean);
@@ -51,7 +51,7 @@ public class JokesAdapter extends CursorAdapter {
         }
 
 
-        counter = counter+1;
+        counter = counter + 1;
 
     }
 }
