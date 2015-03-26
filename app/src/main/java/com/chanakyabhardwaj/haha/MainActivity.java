@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.chanakyabhardwaj.haha.data.JokesContract;
@@ -25,13 +26,15 @@ import com.chanakyabhardwaj.haha.data.JokesContract;
 public class MainActivity extends FragmentActivity implements LoaderManager.LoaderCallbacks<Cursor> {
     private String LOG_TAG = MainActivity.class.getSimpleName();
 
+    Cursor mJokesCursor;
     JokesPagerAdapter mJokesPagerAdapter;
-    protected Cursor mJokesCursor;
     ViewPager mViewPager;
 
     private void getJokes() {
-        new JokesFetchTask(this).execute();
+        new JokesFetchTask(this).execute("meanjokes");
+        new JokesFetchTask(this).execute("jokes");
     }
+
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
@@ -44,6 +47,7 @@ public class MainActivity extends FragmentActivity implements LoaderManager.Load
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         mJokesCursor = data;
+        mJokesPagerAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -63,6 +67,22 @@ public class MainActivity extends FragmentActivity implements LoaderManager.Load
         mViewPager = (ViewPager) findViewById(R.id.viewpager);
         mViewPager.setAdapter(mJokesPagerAdapter);
 
+        mViewPager.setPageTransformer(false, new ViewPager.PageTransformer() {
+            @Override
+            public void transformPage(View view, float position) {
+                view.setTranslationX(view.getWidth() * -position);
+
+                if(position <= -1.0F || position >= 1.0F) {
+                    view.setAlpha(0.0F);
+                } else if( position == 0.0F ) {
+                    view.setAlpha(1.0F);
+                } else {
+                    // position is between -1.0F & 0.0F OR 0.0F & 1.0F
+                    view.setAlpha(1.0F - Math.abs(position));
+                }
+            }
+        });
+
         mViewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
             @Override
             public void onPageSelected(int position) {
@@ -77,12 +97,18 @@ public class MainActivity extends FragmentActivity implements LoaderManager.Load
         }
 
         @Override
+        public int getItemPosition(Object object) {
+            return POSITION_NONE;
+        }
+
+        @Override
         public Fragment getItem(int position) {
-            String jokeTitle = "fake joke title " + position;
-            String jokeText = "fake joke text " + position;
+            String jokeTitle = "";
+            String jokeText = "";
 
             if (mJokesCursor != null && mJokesCursor.getCount() > 0) {
                 mJokesCursor.moveToPosition(position);
+
                 int idx_jokes_title = mJokesCursor.getColumnIndex(JokesContract.JokesEntry.COLUMN_JOKE_TITLE);
                 jokeTitle = mJokesCursor.getString(idx_jokes_title);
 
@@ -94,6 +120,7 @@ public class MainActivity extends FragmentActivity implements LoaderManager.Load
             Bundle args = new Bundle();
             args.putString("title", jokeTitle);
             args.putString("text", jokeText);
+            args.putInt("position", position);
             jokeFrag.setArguments(args);
 
             return jokeFrag;
@@ -101,8 +128,7 @@ public class MainActivity extends FragmentActivity implements LoaderManager.Load
 
         @Override
         public int getCount() {
-            // Show 3 total pages.
-            return 20;
+            return 100;
         }
 
         @Override
@@ -118,13 +144,23 @@ public class MainActivity extends FragmentActivity implements LoaderManager.Load
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.list_item_joke, container, false);
-            TextView dummyTextView = (TextView) rootView.findViewById(R.id.list_item_joke_view);
+            View rootView = inflater.inflate(R.layout.joke_view, container, false);
 
-            String jokeTitle = getArguments().getString("title", "fake default title");
-            String jokeText = getArguments().getString("text", "fake default text");
+            int[] backgrounds = getResources().getIntArray(R.array.backgrounds);
 
-            dummyTextView.setText(jokeTitle + " \n " + jokeText);
+
+            String jokeTitle = getArguments().getString("title", "");
+            TextView jokeTitleView = (TextView) rootView.findViewById(R.id.joke_title);
+            jokeTitleView.setText(jokeTitle);
+
+            String jokeText = getArguments().getString("text", "");
+            TextView jokeTextView = (TextView) rootView.findViewById(R.id.joke_text);
+            jokeTextView.setText(jokeText);
+
+            Integer position = getArguments().getInt("position", 0);
+            LinearLayout jokeLayout = (LinearLayout) rootView.findViewById(R.id.joke_layout);
+            jokeLayout.setBackgroundColor(backgrounds[position % backgrounds.length]);
+
             return rootView;
         }
     }

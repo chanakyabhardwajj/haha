@@ -1,11 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="dark_primary">#FFA000</color>
-    <color name="default_primary">#FFC107</color>
-    <color name="light_primary">#FFECB3</color>
-    <color name="text_primary">#212121</color>
-    <color name="accent_primary">#66ffcc00</color>
-    <color name="primary_text">#212121</color>
-    <color name="secondary_text">#727272</color>
-    <color name="divider">#B6B6B6</color>
+    <color name="color_1">#33B5E6</color>
+    <color name="color_2">#E60F30</color>
+    <color name="color_3">#FF6928</color>
+    <color name="color_4">#06394D</color>
+    <color name="color_5">#24BFB8</color>
+    <color name="color_6">#000000</color>
+    <color name="color_7">#F8CC11</color>
+    <color name="color_8">#555F6E</color>
+
+    <array name="backgrounds">
+        <item>@color/color_1</item>
+        <item>@color/color_2</item>
+        <item>@color/color_3</item>
+        <item>@color/color_4</item>
+        <item>@color/color_5</item>
+        <item>@color/color_6</item>
+        <item>@color/color_7</item>
+        <item>@color/color_8</item>
+
+    </array>
 </resources>

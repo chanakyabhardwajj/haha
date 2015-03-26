@@ -23,7 +23,7 @@ import java.util.Vector;
 /**
  * Created by cb on 3/9/15.
  */
-public class JokesFetchTask extends AsyncTask<Integer, Void, Void> {
+public class JokesFetchTask extends AsyncTask<String, Void, Void> {
     private final String LOG_TAG = JokesFetchTask.class.getSimpleName();
     private final Integer JOKES_COUNT = 5;
 
@@ -37,7 +37,7 @@ public class JokesFetchTask extends AsyncTask<Integer, Void, Void> {
 
 
     @Override
-    protected Void doInBackground(Integer... params) {
+    protected Void doInBackground(String... params) {
         // These two need to be declared outside the try/catch
         // so that they can be closed in the finally block.
         HttpURLConnection urlConnection = null;
@@ -48,7 +48,7 @@ public class JokesFetchTask extends AsyncTask<Integer, Void, Void> {
 
         try {
             Log.v(LOG_TAG, "Fetching the funny from Reddit ... ;)");
-            URL url = new URL("https://www.reddit.com/r/meanjokes/.json?sort=top&count=" + JOKES_COUNT);
+            URL url = new URL("https://www.reddit.com/r/" + params[0] + "/.json?sort=top&t=week&count=" + JOKES_COUNT);
 
             urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setRequestMethod("GET");
@@ -102,41 +102,6 @@ public class JokesFetchTask extends AsyncTask<Integer, Void, Void> {
         return null;
     }
 
-    /*other joke parser*/
-    /*private void addChuckNorrisJokesFromJson(String jokesJsonStr) throws JSONException {
-
-        JSONObject jokesJson = new JSONObject(jokesJsonStr);
-
-        JSONArray jokesArray = jokesJson.getJSONArray("value");
-        String[] allJokes = new String[JOKES_COUNT];
-        Vector<ContentValues> cVVector = new Vector<ContentValues>(JOKES_COUNT);
-
-        for (int i = 0; i < jokesArray.length(); i++) {
-            JSONObject jokeObject = jokesArray.getJSONObject(i);
-            Integer jokeNumber = jokeObject.getInt("id");
-            String jokeText = jokeObject.getString("joke");
-            allJokes[i] = jokeText;
-
-            Boolean jokeExists = dbHelper.jokeExistsInDB(jokeNumber);
-
-            if(!jokeExists){
-                ContentValues jokeValues = new ContentValues();
-
-                jokeValues.put(JokesContract.JokesEntry.COLUMN_JOKE_NUMBER, jokeNumber);
-                jokeValues.put(JokesContract.JokesEntry.COLUMN_JOKE_TEXT, jokeText);
-                cVVector.add(jokeValues);
-            }
-        }
-
-        if (cVVector.size() > 0) {
-            ContentValues[] cvArray = new ContentValues[cVVector.size()];
-            cVVector.toArray(cvArray);
-            int rowsInserted = mContext.getContentResolver()
-                    .bulkInsert(JokesContract.JokesEntry.CONTENT_URI, cvArray);
-            Log.v(LOG_TAG, "inserted " + rowsInserted + " rows of jokes");
-        }
-    }*/
-
     /*Reddit joke parser*/
     private void addRedditJokesFromJson(String jokesJsonStr) throws JSONException {
 
@@ -144,7 +109,7 @@ public class JokesFetchTask extends AsyncTask<Integer, Void, Void> {
         JSONObject data = jokesJson.getJSONObject("data");
 
         JSONArray jokesArray = data.getJSONArray("children");
-        Log.v(LOG_TAG, "parsing " + jokesArray.length() + " rows of jokes");
+        Log.v(LOG_TAG, "JSON dump has " + jokesArray.length() + " jokes");
         Vector<ContentValues> cVVector = new Vector<ContentValues>(JOKES_COUNT);
 
         for (int i = 0; i < jokesArray.length(); i++) {
@@ -153,16 +118,11 @@ public class JokesFetchTask extends AsyncTask<Integer, Void, Void> {
             String jokeTitle = jokeObject.getString("title");
             String jokeText = jokeObject.getString("selftext");
 
-            //Boolean jokeExists = dbHelper.jokeExistsInDB(jokeId);
-
-            //if (!jokeExists) {
-                ContentValues jokeValues = new ContentValues();
-
-                jokeValues.put(JokesContract.JokesEntry.COLUMN_JOKE_ID, jokeId);
-                jokeValues.put(JokesContract.JokesEntry.COLUMN_JOKE_TITLE, jokeTitle);
-                jokeValues.put(JokesContract.JokesEntry.COLUMN_JOKE_TEXT, jokeText);
-                cVVector.add(jokeValues);
-            //}
+            ContentValues jokeValues = new ContentValues();
+            jokeValues.put(JokesContract.JokesEntry.COLUMN_JOKE_ID, jokeId);
+            jokeValues.put(JokesContract.JokesEntry.COLUMN_JOKE_TITLE, jokeTitle);
+            jokeValues.put(JokesContract.JokesEntry.COLUMN_JOKE_TEXT, jokeText);
+            cVVector.add(jokeValues);
         }
 
         if (cVVector.size() > 0) {
