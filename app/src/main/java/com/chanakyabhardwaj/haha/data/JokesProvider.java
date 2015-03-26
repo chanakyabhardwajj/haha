@@ -172,7 +172,7 @@ public class JokesProvider extends ContentProvider {
                 int returnCount = 0;
                 try {
                     for (ContentValues value : values) {
-                        long _id = db.insert(JokesContract.JokesEntry.TABLE_NAME, null, value);
+                        long _id = db.insertWithOnConflict(JokesContract.JokesEntry.TABLE_NAME, null, value, 4);
                         if (_id != -1) {
                             returnCount++;
                         }

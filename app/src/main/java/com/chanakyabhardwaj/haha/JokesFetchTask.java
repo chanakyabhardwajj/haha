@@ -25,7 +25,7 @@ import java.util.Vector;
  */
 public class JokesFetchTask extends AsyncTask<Integer, Void, Void> {
     private final String LOG_TAG = JokesFetchTask.class.getSimpleName();
-    private final Integer JOKES_COUNT = 100;
+    private final Integer JOKES_COUNT = 5;
 
     private JokesDBHelper dbHelper;
     private final Context mContext;
@@ -48,7 +48,7 @@ public class JokesFetchTask extends AsyncTask<Integer, Void, Void> {
 
         try {
             Log.v(LOG_TAG, "Fetching the funny from Reddit ... ;)");
-            URL url = new URL("https://www.reddit.com/r/jokes/.json?sort=top&count=" + JOKES_COUNT);
+            URL url = new URL("https://www.reddit.com/r/meanjokes/.json?sort=top&count=" + JOKES_COUNT);
 
             urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setRequestMethod("GET");
@@ -153,16 +153,16 @@ public class JokesFetchTask extends AsyncTask<Integer, Void, Void> {
             String jokeTitle = jokeObject.getString("title");
             String jokeText = jokeObject.getString("selftext");
 
-            Boolean jokeExists = dbHelper.jokeExistsInDB(jokeId);
+            //Boolean jokeExists = dbHelper.jokeExistsInDB(jokeId);
 
-            if (!jokeExists) {
+            //if (!jokeExists) {
                 ContentValues jokeValues = new ContentValues();
 
                 jokeValues.put(JokesContract.JokesEntry.COLUMN_JOKE_ID, jokeId);
                 jokeValues.put(JokesContract.JokesEntry.COLUMN_JOKE_TITLE, jokeTitle);
                 jokeValues.put(JokesContract.JokesEntry.COLUMN_JOKE_TEXT, jokeText);
                 cVVector.add(jokeValues);
-            }
+            //}
         }
 
         if (cVVector.size() > 0) {
@@ -171,6 +171,7 @@ public class JokesFetchTask extends AsyncTask<Integer, Void, Void> {
             int rowsInserted = mContext.getContentResolver()
                     .bulkInsert(JokesContract.JokesEntry.CONTENT_URI, cvArray);
             Log.v(LOG_TAG, "inserted " + rowsInserted + " rows of jokes");
+            Log.v(LOG_TAG, "TOTAL  " + dbHelper.jokesCountInDB());
         }
     }
 }

@@ -14,7 +14,7 @@ import com.chanakyabhardwaj.haha.data.JokesContract.JokesEntry;
 public class JokesDBHelper extends SQLiteOpenHelper {
 
     // If you change the database schema, you must increment the database version.
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
 
     public static final String DATABASE_NAME = "jokes.db";
 
@@ -27,10 +27,11 @@ public class JokesDBHelper extends SQLiteOpenHelper {
         // Create a table to hold jokes. A joke consists of :
         // id, title, text
         final String SQL_CREATE_JOKES_TABLE = "CREATE TABLE " + JokesEntry.TABLE_NAME + " (" +
-                JokesEntry._ID + " INTEGER PRIMARY KEY," +
-                JokesEntry.COLUMN_JOKE_ID + " TEXT NOT NULL," +
+                JokesEntry._ID + " INTEGER," +
+                JokesEntry.COLUMN_JOKE_ID + " TEXT NOT NULL PRIMARY KEY," +
                 JokesEntry.COLUMN_JOKE_TITLE + " TEXT NOT NULL," +
                 JokesEntry.COLUMN_JOKE_TEXT + " TEXT NOT NULL" +
+                //"PRIMARY KEY (" + JokesEntry._ID + "," + JokesEntry.COLUMN_JOKE_ID + ")" +
                 " );";
 
         sqLiteDatabase.execSQL(SQL_CREATE_JOKES_TABLE);
