@@ -1,6 +1,9 @@
 package com.chanakyabhardwaj.haha;
 
 import android.database.Cursor;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -29,10 +32,10 @@ public class MainActivity extends FragmentActivity implements LoaderManager.Load
     Cursor mJokesCursor;
     JokesPagerAdapter mJokesPagerAdapter;
     ViewPager mViewPager;
+    private int JOKES_COUNT = 25;
 
     private void getJokes() {
-        new JokesFetchTask(this).execute("meanjokes");
-        new JokesFetchTask(this).execute("jokes");
+        new JokesFetchTask(this, JOKES_COUNT).execute();
     }
 
 
@@ -47,6 +50,7 @@ public class MainActivity extends FragmentActivity implements LoaderManager.Load
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         mJokesCursor = data;
+        JOKES_COUNT = mJokesCursor.getCount();
         mJokesPagerAdapter.notifyDataSetChanged();
     }
 
@@ -87,6 +91,10 @@ public class MainActivity extends FragmentActivity implements LoaderManager.Load
             @Override
             public void onPageSelected(int position) {
                 Log.v(LOG_TAG, "New page number : " + position);
+                if(JOKES_COUNT - position < 2) {
+
+                    getJokes();
+                }
             }
         });
     }
@@ -128,7 +136,7 @@ public class MainActivity extends FragmentActivity implements LoaderManager.Load
 
         @Override
         public int getCount() {
-            return 100;
+            return JOKES_COUNT;
         }
 
         @Override
@@ -159,6 +167,7 @@ public class MainActivity extends FragmentActivity implements LoaderManager.Load
 
             Integer position = getArguments().getInt("position", 0);
             LinearLayout jokeLayout = (LinearLayout) rootView.findViewById(R.id.joke_layout);
+
             jokeLayout.setBackgroundColor(backgrounds[position % backgrounds.length]);
 
             return rootView;

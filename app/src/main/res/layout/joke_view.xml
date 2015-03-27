@@ -2,7 +2,6 @@
     android:id="@+id/joke_layout"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="#E60F30"
     android:minHeight="?android:attr/listPreferredItemHeight"
     android:orientation="vertical">
 

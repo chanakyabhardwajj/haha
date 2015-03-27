@@ -75,4 +75,24 @@ public class JokesDBHelper extends SQLiteOpenHelper {
 
         return cursor.getCount();
     }
+
+    /*
+        Helper function for debugging purposes. Not really used.
+     */
+    public String lastJokeInDB() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "Select * from " + JokesContract.JokesEntry.TABLE_NAME + " ORDER BY " + JokesContract.JokesEntry.COLUMN_JOKE_ID + " DESC LIMIT 1";
+        Cursor cursor = db.rawQuery(query, null);
+
+        if (cursor.getCount() > 0) {
+            cursor.moveToFirst();
+            int idx_jokes_id = cursor.getColumnIndex(JokesContract.JokesEntry.COLUMN_JOKE_ID);
+            String lastJokeId = cursor.getString(idx_jokes_id);
+
+            return lastJokeId;
+        } else {
+            return null;
+        }
+
+    }
 }

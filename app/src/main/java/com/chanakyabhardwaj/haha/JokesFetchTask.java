@@ -23,21 +23,23 @@ import java.util.Vector;
 /**
  * Created by cb on 3/9/15.
  */
-public class JokesFetchTask extends AsyncTask<String, Void, Void> {
+public class JokesFetchTask extends AsyncTask<Integer, Void, Void> {
     private final String LOG_TAG = JokesFetchTask.class.getSimpleName();
-    private final Integer JOKES_COUNT = 5;
+
 
     private JokesDBHelper dbHelper;
     private final Context mContext;
+    private final Integer JOKES_COUNT;
 
-    public JokesFetchTask(Context context) {
+    public JokesFetchTask(Context context, int count) {
         mContext = context;
         dbHelper = new JokesDBHelper(this.mContext);
+        JOKES_COUNT = count;
     }
 
 
     @Override
-    protected Void doInBackground(String... params) {
+    protected Void doInBackground(Integer... params) {
         // These two need to be declared outside the try/catch
         // so that they can be closed in the finally block.
         HttpURLConnection urlConnection = null;
@@ -48,7 +50,15 @@ public class JokesFetchTask extends AsyncTask<String, Void, Void> {
 
         try {
             Log.v(LOG_TAG, "Fetching the funny from Reddit ... ;)");
-            URL url = new URL("https://www.reddit.com/r/" + params[0] + "/.json?sort=top&t=week&count=" + JOKES_COUNT);
+
+            String lastJokeId = dbHelper.lastJokeInDB();
+            String urlString = "https://www.reddit.com/r/jokes+meanjokes+antijokes+dadjokes/.json?sort=top&t=week&limit=" + JOKES_COUNT;
+            if(lastJokeId != null) {
+                urlString = urlString + "&after=t3_" + lastJokeId;
+            }
+            URL url = new URL(urlString);
+
+            Log.v(">>>>>>>>", urlString);
 
             urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setRequestMethod("GET");
@@ -112,7 +122,7 @@ public class JokesFetchTask extends AsyncTask<String, Void, Void> {
         Log.v(LOG_TAG, "JSON dump has " + jokesArray.length() + " jokes");
         Vector<ContentValues> cVVector = new Vector<ContentValues>(JOKES_COUNT);
 
-        for (int i = 0; i < jokesArray.length(); i++) {
+        for (int i = 0; i < JOKES_COUNT; i++) {
             JSONObject jokeObject = jokesArray.getJSONObject(i).getJSONObject("data");
             String jokeId = jokeObject.getString("id");
             String jokeTitle = jokeObject.getString("title");
