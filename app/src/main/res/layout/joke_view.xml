@@ -1,9 +1,17 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/joke_layout"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:minHeight="?android:attr/listPreferredItemHeight"
     android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/meme_char"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:alpha="0.3"/>
 
     <ScrollView
         android:layout_width="fill_parent"
@@ -49,6 +57,6 @@
                 android:textSize="24sp" />
         </LinearLayout>
     </ScrollView>
-</LinearLayout>
+</RelativeLayout>
 
 

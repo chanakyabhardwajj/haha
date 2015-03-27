@@ -58,8 +58,6 @@ public class JokesFetchTask extends AsyncTask<Integer, Void, Void> {
             }
             URL url = new URL(urlString);
 
-            Log.v(">>>>>>>>", urlString);
-
             urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setRequestMethod("GET");
             urlConnection.connect();

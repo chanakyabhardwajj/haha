@@ -18,7 +18,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.chanakyabhardwaj.haha.data.JokesContract;
@@ -166,9 +168,12 @@ public class MainActivity extends FragmentActivity implements LoaderManager.Load
             jokeTextView.setText(jokeText);
 
             Integer position = getArguments().getInt("position", 0);
-            LinearLayout jokeLayout = (LinearLayout) rootView.findViewById(R.id.joke_layout);
+            RelativeLayout jokeLayout = (RelativeLayout) rootView.findViewById(R.id.joke_layout);
 
             jokeLayout.setBackgroundColor(backgrounds[position % backgrounds.length]);
+
+            ImageView memeChar = (ImageView) rootView.findViewById(R.id.meme_char);
+            memeChar.setBackgroundResource(R.drawable.freddie_cool);
 
             return rootView;
         }
