@@ -55,7 +55,7 @@ public class JokesProvider extends ContentProvider {
                         selectionArgs,
                         null,
                         null,
-                        sortOrder
+                        null
                 );
                 break;
             }

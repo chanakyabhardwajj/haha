@@ -1,11 +1,14 @@
 package com.chanakyabhardwaj.haha;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -14,14 +17,19 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.view.ViewPager;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.chanakyabhardwaj.haha.data.JokesContract;
 
@@ -29,12 +37,14 @@ import com.chanakyabhardwaj.haha.data.JokesContract;
  * Created by cb on 3/24/15.
  */
 public class MainActivity extends FragmentActivity implements LoaderManager.LoaderCallbacks<Cursor> {
+    public static final String PREFS_NAME = "JokesPrefsFile";
     private String LOG_TAG = MainActivity.class.getSimpleName();
 
     Cursor mJokesCursor;
     JokesPagerAdapter mJokesPagerAdapter;
     ViewPager mViewPager;
-    private int JOKES_COUNT = 25;
+    private int JOKES_COUNT = 5;
+    private int pageNumber;
 
     private void getJokes() {
         new JokesFetchTask(this, JOKES_COUNT).execute();
@@ -54,11 +64,41 @@ public class MainActivity extends FragmentActivity implements LoaderManager.Load
         mJokesCursor = data;
         JOKES_COUNT = mJokesCursor.getCount();
         mJokesPagerAdapter.notifyDataSetChanged();
+        mViewPager.setCurrentItem(pageNumber);
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
         mJokesCursor = null;
+        mJokesCursor.close();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+        pageNumber = settings.getInt("pageNumber", 0);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putInt("pageNumber", pageNumber);
+        editor.commit();
+    }
+
+    private String[] extractJokeFromCursor(int position) {
+        mJokesCursor.moveToPosition(position);
+
+        int idx_jokes_title = mJokesCursor.getColumnIndex(JokesContract.JokesEntry.COLUMN_JOKE_TITLE);
+        String jokeTitle = mJokesCursor.getString(idx_jokes_title);
+
+        int idx_jokes_text = mJokesCursor.getColumnIndex(JokesContract.JokesEntry.COLUMN_JOKE_TEXT);
+        String jokeText = mJokesCursor.getString(idx_jokes_text);
+
+        return new String[] {jokeTitle, jokeText};
     }
 
     @Override
@@ -78,9 +118,9 @@ public class MainActivity extends FragmentActivity implements LoaderManager.Load
             public void transformPage(View view, float position) {
                 view.setTranslationX(view.getWidth() * -position);
 
-                if(position <= -1.0F || position >= 1.0F) {
+                if (position <= -1.0F || position >= 1.0F) {
                     view.setAlpha(0.0F);
-                } else if( position == 0.0F ) {
+                } else if (position == 0.0F) {
                     view.setAlpha(1.0F);
                 } else {
                     // position is between -1.0F & 0.0F OR 0.0F & 1.0F
@@ -92,9 +132,8 @@ public class MainActivity extends FragmentActivity implements LoaderManager.Load
         mViewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
             @Override
             public void onPageSelected(int position) {
-                Log.v(LOG_TAG, "New page number : " + position);
-                if(JOKES_COUNT - position < 2) {
-
+                pageNumber = position;
+                if (JOKES_COUNT - position < 2) {
                     getJokes();
                 }
             }
@@ -117,13 +156,11 @@ public class MainActivity extends FragmentActivity implements LoaderManager.Load
             String jokeText = "";
 
             if (mJokesCursor != null && mJokesCursor.getCount() > 0) {
-                mJokesCursor.moveToPosition(position);
-
-                int idx_jokes_title = mJokesCursor.getColumnIndex(JokesContract.JokesEntry.COLUMN_JOKE_TITLE);
-                jokeTitle = mJokesCursor.getString(idx_jokes_title);
-
-                int idx_jokes_text = mJokesCursor.getColumnIndex(JokesContract.JokesEntry.COLUMN_JOKE_TEXT);
-                jokeText = mJokesCursor.getString(idx_jokes_text);
+                String[] joke = extractJokeFromCursor(position);
+                jokeTitle = joke[0];
+                jokeText = joke[1];
+            } else {
+                Toast.makeText(getApplicationContext(), "No internet. No funny.", Toast.LENGTH_LONG).show();
             }
 
             JokePageFragment jokeFrag = new JokePageFragment();
@@ -138,44 +175,12 @@ public class MainActivity extends FragmentActivity implements LoaderManager.Load
 
         @Override
         public int getCount() {
-            return JOKES_COUNT;
+            return JOKES_COUNT > 0 ? JOKES_COUNT : 1;
         }
 
         @Override
         public CharSequence getPageTitle(int position) {
             return null;
-        }
-    }
-
-    public static class JokePageFragment extends Fragment {
-        public JokePageFragment() {
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.joke_view, container, false);
-
-            int[] backgrounds = getResources().getIntArray(R.array.backgrounds);
-
-
-            String jokeTitle = getArguments().getString("title", "");
-            TextView jokeTitleView = (TextView) rootView.findViewById(R.id.joke_title);
-            jokeTitleView.setText(jokeTitle);
-
-            String jokeText = getArguments().getString("text", "");
-            TextView jokeTextView = (TextView) rootView.findViewById(R.id.joke_text);
-            jokeTextView.setText(jokeText);
-
-            Integer position = getArguments().getInt("position", 0);
-            RelativeLayout jokeLayout = (RelativeLayout) rootView.findViewById(R.id.joke_layout);
-
-            jokeLayout.setBackgroundColor(backgrounds[position % backgrounds.length]);
-
-            ImageView memeChar = (ImageView) rootView.findViewById(R.id.meme_char);
-            memeChar.setBackgroundResource(R.drawable.freddie_cool);
-
-            return rootView;
         }
     }
 }

@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.chanakyabhardwaj.haha.data.JokesContract;
 import com.chanakyabhardwaj.haha.data.JokesDBHelper;
@@ -26,7 +27,6 @@ import java.util.Vector;
 public class JokesFetchTask extends AsyncTask<Integer, Void, Void> {
     private final String LOG_TAG = JokesFetchTask.class.getSimpleName();
 
-
     private JokesDBHelper dbHelper;
     private final Context mContext;
     private final Integer JOKES_COUNT;
@@ -36,7 +36,6 @@ public class JokesFetchTask extends AsyncTask<Integer, Void, Void> {
         dbHelper = new JokesDBHelper(this.mContext);
         JOKES_COUNT = count;
     }
-
 
     @Override
     protected Void doInBackground(Integer... params) {
@@ -52,7 +51,7 @@ public class JokesFetchTask extends AsyncTask<Integer, Void, Void> {
             Log.v(LOG_TAG, "Fetching the funny from Reddit ... ;)");
 
             String lastJokeId = dbHelper.lastJokeInDB();
-            String urlString = "https://www.reddit.com/r/jokes+meanjokes+antijokes+dadjokes/.json?sort=top&t=week&limit=" + JOKES_COUNT;
+            String urlString = "https://www.reddit.com/r/jokes+meanjokes/.json?sort=hot&limit=" + JOKES_COUNT;
             if(lastJokeId != null) {
                 urlString = urlString + "&after=t3_" + lastJokeId;
             }
@@ -85,7 +84,7 @@ public class JokesFetchTask extends AsyncTask<Integer, Void, Void> {
             }
             jokesJsonStr = buffer.toString();
         } catch (IOException e) {
-            Log.e(LOG_TAG, "Error ", e);
+            Log.e(LOG_TAG, "Error", e);
             return null;
         } finally {
             if (urlConnection != null) {
@@ -108,6 +107,11 @@ public class JokesFetchTask extends AsyncTask<Integer, Void, Void> {
         }
 
         return null;
+    }
+
+    @Override
+    protected void onPostExecute(Void result) {
+        Toast.makeText(mContext, "No internet. No funny.", Toast.LENGTH_LONG).show();
     }
 
     /*Reddit joke parser*/

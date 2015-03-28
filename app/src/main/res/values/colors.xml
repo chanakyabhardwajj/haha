@@ -1,23 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="color_1">#33B5E6</color>
-    <color name="color_2">#E60F30</color>
-    <color name="color_3">#FF6928</color>
-    <color name="color_4">#06394D</color>
-    <color name="color_5">#24BFB8</color>
-    <color name="color_6">#000000</color>
-    <color name="color_7">#F8CC11</color>
-    <color name="color_8">#555F6E</color>
+    <color name="blue">#33B5E6</color>
+    <color name="red">#E60F30</color>
+    <color name="orange">#FF6928</color>
+    <color name="darkBlue">#06394D</color>
+    <color name="black">#000000</color>
+    <color name="yellow">#ffeb3b</color>
+    <color name="grey">#555F6E</color>
+
+    <drawable name="black">#000000</drawable>
 
     <array name="backgrounds">
-        <item>@color/color_1</item>
-        <item>@color/color_2</item>
-        <item>@color/color_3</item>
-        <item>@color/color_4</item>
-        <item>@color/color_5</item>
-        <item>@color/color_6</item>
-        <item>@color/color_7</item>
-        <item>@color/color_8</item>
-
+        <item>@color/blue</item>
+        <item>@color/red</item>
+        <item>@color/orange</item>
+        <item>@color/darkBlue</item>
+        <item>@color/black</item>
+        <item>@color/grey</item>
     </array>
 </resources>

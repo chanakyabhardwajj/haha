@@ -1,7 +1,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/joke_layout"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
+    android:layout_height="wrap_content"
     android:minHeight="?android:attr/listPreferredItemHeight"
     android:orientation="vertical">
 
@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
-        android:alpha="0.3"/>
+        android:alpha="0.3" />
 
     <ScrollView
         android:layout_width="fill_parent"
@@ -24,7 +24,7 @@
 
             <TextView xmlns:android="http://schemas.android.com/apk/res/android"
                 android:id="@+id/joke_title"
-                android:layout_width="match_parent"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:gravity="left"
                 android:paddingBottom="30dp"
@@ -33,6 +33,7 @@
                 android:paddingTop="30dp"
                 android:textColor="@android:color/white"
                 android:textSize="30sp"
+                android:textIsSelectable="true"
                 android:textStyle="bold" />
 
             <TextView
@@ -45,15 +46,16 @@
 
             <TextView xmlns:android="http://schemas.android.com/apk/res/android"
                 android:id="@+id/joke_text"
-                android:layout_width="match_parent"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="sans-serif-thin"
-                android:gravity="right"
+                android:gravity="end"
                 android:paddingBottom="30dp"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
                 android:paddingTop="30dp"
                 android:textColor="@android:color/white"
+                android:textIsSelectable="true"
                 android:textSize="24sp" />
         </LinearLayout>
     </ScrollView>
