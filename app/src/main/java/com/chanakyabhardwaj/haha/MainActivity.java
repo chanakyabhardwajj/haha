@@ -1,14 +1,9 @@
 package com.chanakyabhardwaj.haha;
 
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -17,18 +12,7 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.view.ViewPager;
-import android.text.Html;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.chanakyabhardwaj.haha.data.JokesContract;
@@ -43,7 +27,7 @@ public class MainActivity extends FragmentActivity implements LoaderManager.Load
     Cursor mJokesCursor;
     JokesPagerAdapter mJokesPagerAdapter;
     ViewPager mViewPager;
-    private int JOKES_COUNT = 5;
+    private int JOKES_COUNT = 10;
     private int pageNumber;
 
     private void getJokes() {
@@ -77,7 +61,7 @@ public class MainActivity extends FragmentActivity implements LoaderManager.Load
     protected void onResume() {
         super.onResume();
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
-        pageNumber = settings.getInt("pageNumber", 0);
+        pageNumber = settings.getInt("pageNumber", 1);
     }
 
     @Override

@@ -30,6 +30,7 @@ public class JokesFetchTask extends AsyncTask<Integer, Void, Void> {
     private JokesDBHelper dbHelper;
     private final Context mContext;
     private final Integer JOKES_COUNT;
+    private boolean errorFlag;
 
     public JokesFetchTask(Context context, int count) {
         mContext = context;
@@ -85,6 +86,7 @@ public class JokesFetchTask extends AsyncTask<Integer, Void, Void> {
             jokesJsonStr = buffer.toString();
         } catch (IOException e) {
             Log.e(LOG_TAG, "Error", e);
+            errorFlag = true;
             return null;
         } finally {
             if (urlConnection != null) {
@@ -111,7 +113,10 @@ public class JokesFetchTask extends AsyncTask<Integer, Void, Void> {
 
     @Override
     protected void onPostExecute(Void result) {
-        Toast.makeText(mContext, "No internet. No funny.", Toast.LENGTH_LONG).show();
+        if(errorFlag) {
+            Toast.makeText(mContext, "No internet. No funny.", Toast.LENGTH_LONG).show();
+        }
+
     }
 
     /*Reddit joke parser*/
