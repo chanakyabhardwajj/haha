@@ -30,7 +30,7 @@ public class JokesFetchTask extends AsyncTask<Integer, Void, Void> {
     private JokesDBHelper dbHelper;
     private final Context mContext;
     private final Integer JOKES_COUNT;
-    private boolean errorFlag;
+    private boolean errorFlag = false;
 
     public JokesFetchTask(Context context, int count) {
         mContext = context;

@@ -7,15 +7,15 @@
     <color name="black">#000000</color>
     <color name="yellow">#ffeb3b</color>
     <color name="grey">#555F6E</color>
+    <color name="white">#FFFFFF</color>
 
-    <drawable name="black">#000000</drawable>
+
+    <drawable name="overlay">#60000000</drawable>
 
     <array name="backgrounds">
-        <item>@color/blue</item>
         <item>@color/red</item>
         <item>@color/orange</item>
         <item>@color/darkBlue</item>
         <item>@color/black</item>
-        <item>@color/grey</item>
     </array>
 </resources>

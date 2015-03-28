@@ -3,16 +3,22 @@
 
     <style name="myTheme" parent="@android:style/Theme.Material.Light.DarkActionBar">
         <item name="android:actionBarStyle">@style/myTheme.ActionBar</item>
+        <item name="android:windowActionBarOverlay">true</item>
+        <!-- Support library compatibility -->
+        <item name="actionBarStyle">@style/myTheme.ActionBar</item>
+        <item name="windowActionBarOverlay">true</item>
+
         <item name="android:actionMenuTextColor">@color/red</item>
     </style>
 
     <style name="myTheme.ActionBar" parent="@android:style/Widget.Material.Light.ActionBar">
-        <item name="android:background">@drawable/black</item>
+        <item name="android:background">@drawable/overlay</item>
         <item name="android:titleTextStyle">@style/myTheme.ActionBar.Text</item>
     </style>
 
     <style name="myTheme.ActionBar.Text" parent="@android:style/TextAppearance">
-        <item name="android:textColor">@color/red</item>
+        <item name="android:textColor">@color/white</item>
+
     </style>
 
 </resources>

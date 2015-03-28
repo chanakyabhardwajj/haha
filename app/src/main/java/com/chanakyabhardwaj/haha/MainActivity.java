@@ -82,7 +82,7 @@ public class MainActivity extends FragmentActivity implements LoaderManager.Load
         int idx_jokes_text = mJokesCursor.getColumnIndex(JokesContract.JokesEntry.COLUMN_JOKE_TEXT);
         String jokeText = mJokesCursor.getString(idx_jokes_text);
 
-        return new String[] {jokeTitle, jokeText};
+        return new String[]{jokeTitle, jokeText};
     }
 
     @Override
@@ -97,7 +97,7 @@ public class MainActivity extends FragmentActivity implements LoaderManager.Load
         mViewPager = (ViewPager) findViewById(R.id.viewpager);
         mViewPager.setAdapter(mJokesPagerAdapter);
 
-        mViewPager.setPageTransformer(false, new ViewPager.PageTransformer() {
+        /*mViewPager.setPageTransformer(false, new ViewPager.PageTransformer() {
             @Override
             public void transformPage(View view, float position) {
                 view.setTranslationX(view.getWidth() * -position);
@@ -111,7 +111,7 @@ public class MainActivity extends FragmentActivity implements LoaderManager.Load
                     view.setAlpha(1.0F - Math.abs(position));
                 }
             }
-        });
+        });*/
 
         mViewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
             @Override
