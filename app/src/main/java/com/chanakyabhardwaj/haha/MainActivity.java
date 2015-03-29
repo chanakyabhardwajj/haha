@@ -12,7 +12,6 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.view.ViewPager;
-import android.view.View;
 import android.widget.Toast;
 
 import com.chanakyabhardwaj.haha.data.JokesContract;
@@ -22,23 +21,41 @@ import com.chanakyabhardwaj.haha.data.JokesContract;
  */
 public class MainActivity extends FragmentActivity implements LoaderManager.LoaderCallbacks<Cursor> {
     public static final String PREFS_NAME = "JokesPrefsFile";
-    private String LOG_TAG = MainActivity.class.getSimpleName();
+    private int pageNumber; //tracks the page/joke the user is on.
 
     Cursor mJokesCursor;
     JokesPagerAdapter mJokesPagerAdapter;
     ViewPager mViewPager;
-    private int JOKES_COUNT = 10;
-    private int pageNumber;
+    private int JOKES_COUNT;
+
 
     private void getJokes() {
-        new JokesFetchTask(this, JOKES_COUNT).execute();
+        //Fetch only 10 jokes every time.
+        //This will ensure that a user sees only 9 stale jokes upon her revisit.
+        new JokesFetchTask(this, 10).execute();
     }
 
+    //Track the last joke the user was reading
+    @Override
+    protected void onPause() {
+        super.onPause();
+        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putInt("pageNumber", pageNumber);
+        editor.commit();
+    }
+
+    //Resume from the last joke the user was reading
+    @Override
+    protected void onResume() {
+        super.onResume();
+        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+        pageNumber = settings.getInt("pageNumber", 0);
+    }
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         getJokes();
-
         Uri jokesUri = JokesContract.JokesEntry.CONTENT_URI;
         return new CursorLoader(this, jokesUri, null, null, null, null);
     }
@@ -57,22 +74,7 @@ public class MainActivity extends FragmentActivity implements LoaderManager.Load
         mJokesCursor.close();
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
-        pageNumber = settings.getInt("pageNumber", 1);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
-        SharedPreferences.Editor editor = settings.edit();
-        editor.putInt("pageNumber", pageNumber);
-        editor.commit();
-    }
-
+    //Helper function
     private String[] extractJokeFromCursor(int position) {
         mJokesCursor.moveToPosition(position);
 
@@ -159,7 +161,7 @@ public class MainActivity extends FragmentActivity implements LoaderManager.Load
 
         @Override
         public int getCount() {
-            return JOKES_COUNT > 0 ? JOKES_COUNT : 1;
+            return JOKES_COUNT;
         }
 
         @Override

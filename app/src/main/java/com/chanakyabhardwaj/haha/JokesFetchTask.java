@@ -49,15 +49,13 @@ public class JokesFetchTask extends AsyncTask<Integer, Void, Void> {
         String jokesJsonStr = null;
 
         try {
-            Log.v(LOG_TAG, "Fetching the funny from Reddit ... ;)");
-
             String lastJokeId = dbHelper.lastJokeInDB();
             String urlString = "https://www.reddit.com/r/jokes+meanjokes/.json?sort=hot&limit=" + JOKES_COUNT;
-            if(lastJokeId != null) {
+
+            if (lastJokeId != null && !lastJokeId.isEmpty()) {
                 urlString = urlString + "&after=t3_" + lastJokeId;
             }
             URL url = new URL(urlString);
-
             urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setRequestMethod("GET");
             urlConnection.connect();
@@ -113,7 +111,7 @@ public class JokesFetchTask extends AsyncTask<Integer, Void, Void> {
 
     @Override
     protected void onPostExecute(Void result) {
-        if(errorFlag) {
+        if (errorFlag) {
             Toast.makeText(mContext, "No internet. No funny.", Toast.LENGTH_LONG).show();
         }
 
@@ -126,10 +124,10 @@ public class JokesFetchTask extends AsyncTask<Integer, Void, Void> {
         JSONObject data = jokesJson.getJSONObject("data");
 
         JSONArray jokesArray = data.getJSONArray("children");
-        Log.v(LOG_TAG, "JSON dump has " + jokesArray.length() + " jokes");
         Vector<ContentValues> cVVector = new Vector<ContentValues>(JOKES_COUNT);
 
         for (int i = 0; i < JOKES_COUNT; i++) {
+
             JSONObject jokeObject = jokesArray.getJSONObject(i).getJSONObject("data");
             String jokeId = jokeObject.getString("id");
             String jokeTitle = jokeObject.getString("title");
@@ -145,10 +143,8 @@ public class JokesFetchTask extends AsyncTask<Integer, Void, Void> {
         if (cVVector.size() > 0) {
             ContentValues[] cvArray = new ContentValues[cVVector.size()];
             cVVector.toArray(cvArray);
-            int rowsInserted = mContext.getContentResolver()
+            mContext.getContentResolver()
                     .bulkInsert(JokesContract.JokesEntry.CONTENT_URI, cvArray);
-            Log.v(LOG_TAG, "inserted " + rowsInserted + " rows of jokes");
-            Log.v(LOG_TAG, "TOTAL  " + dbHelper.jokesCountInDB());
         }
     }
 }

@@ -27,8 +27,8 @@ public class JokesDBHelper extends SQLiteOpenHelper {
         // Create a table to hold jokes. A joke consists of :
         // id, title, text
         final String SQL_CREATE_JOKES_TABLE = "CREATE TABLE " + JokesEntry.TABLE_NAME + " (" +
-                JokesEntry._ID + " INTEGER," +
-                JokesEntry.COLUMN_JOKE_ID + " TEXT NOT NULL PRIMARY KEY," +
+                JokesEntry._ID + " INTEGER PRIMARY KEY," +
+                JokesEntry.COLUMN_JOKE_ID + " TEXT NOT NULL," +
                 JokesEntry.COLUMN_JOKE_TITLE + " TEXT NOT NULL," +
                 JokesEntry.COLUMN_JOKE_TEXT + " TEXT NOT NULL" +
                 " );";
@@ -76,19 +76,16 @@ public class JokesDBHelper extends SQLiteOpenHelper {
         return cursor.getCount();
     }
 
-    /*
-        Helper function for debugging purposes. Not really used.
-     */
+
     public String lastJokeInDB() {
         SQLiteDatabase db = this.getReadableDatabase();
-        String query = "Select * from " + JokesContract.JokesEntry.TABLE_NAME + " ORDER BY " + JokesContract.JokesEntry.COLUMN_JOKE_ID + " DESC LIMIT 1";
+        String query = "Select * from " + JokesContract.JokesEntry.TABLE_NAME + " ORDER BY " + JokesContract.JokesEntry._ID + " DESC LIMIT 1";
         Cursor cursor = db.rawQuery(query, null);
 
-        if (cursor.getCount() > 0) {
+        if (cursor != null && cursor.getCount() > 0) {
             cursor.moveToFirst();
             int idx_jokes_id = cursor.getColumnIndex(JokesContract.JokesEntry.COLUMN_JOKE_ID);
             String lastJokeId = cursor.getString(idx_jokes_id);
-
             return lastJokeId;
         } else {
             return null;
