@@ -1,24 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <resources>
-
-    <style name="myTheme" parent="@android:style/Theme.Material.Light.DarkActionBar">
-        <item name="android:actionBarStyle">@style/myTheme.ActionBar</item>
+    <!-- inherit from the material theme -->
+    <style name="AppTheme" parent="Theme.AppCompat">
+        <item name="android:actionBarStyle">@style/AppTheme.ActionBar</item>
         <item name="android:windowActionBarOverlay">true</item>
-        <!-- Support library compatibility -->
-        <item name="actionBarStyle">@style/myTheme.ActionBar</item>
         <item name="windowActionBarOverlay">true</item>
-
-        <item name="android:actionMenuTextColor">@color/red</item>
     </style>
 
-    <style name="myTheme.ActionBar" parent="@android:style/Widget.Material.Light.ActionBar">
-        <item name="android:background">@drawable/overlay</item>
-        <item name="android:titleTextStyle">@style/myTheme.ActionBar.Text</item>
-    </style>
+    <style name="AppTheme.ActionBar" parent="@style/Widget.AppCompat.ActionBar">
+        <item name="android:background">@android:color/transparent</item>
 
-    <style name="myTheme.ActionBar.Text" parent="@android:style/TextAppearance">
-        <item name="android:textColor">@color/white</item>
-
+        <item name="background">@android:color/transparent</item>
     </style>
 
 </resources>

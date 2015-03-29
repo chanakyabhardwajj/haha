@@ -5,13 +5,14 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.ShareActionProvider;
 import android.widget.Toast;
 
 import com.chanakyabhardwaj.haha.data.JokesContract;
@@ -19,7 +20,7 @@ import com.chanakyabhardwaj.haha.data.JokesContract;
 /**
  * Created by cb on 3/24/15.
  */
-public class MainActivity extends FragmentActivity implements LoaderManager.LoaderCallbacks<Cursor> {
+public class MainActivity extends ActionBarActivity implements LoaderManager.LoaderCallbacks<Cursor> {
     public static final String PREFS_NAME = "JokesPrefsFile";
     private int pageNumber; //tracks the page/joke the user is on.
 
@@ -27,7 +28,6 @@ public class MainActivity extends FragmentActivity implements LoaderManager.Load
     JokesPagerAdapter mJokesPagerAdapter;
     ViewPager mViewPager;
     private int JOKES_COUNT;
-
 
     private void getJokes() {
         //Fetch only 10 jokes every time.

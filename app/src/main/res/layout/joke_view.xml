@@ -7,6 +7,7 @@
 
     <ImageView
         android:id="@+id/meme_char"
+        android:src="@drawable/freddie_cool"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"

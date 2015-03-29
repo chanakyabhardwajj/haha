@@ -11,6 +11,7 @@
 
 
     <drawable name="overlay">#60000000</drawable>
+    <color name="overlay">#60000000</color>
 
     <array name="backgrounds">
         <item>@color/red</item>

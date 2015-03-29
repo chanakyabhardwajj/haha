@@ -126,7 +126,7 @@ public class JokesFetchTask extends AsyncTask<Integer, Void, Void> {
         JSONArray jokesArray = data.getJSONArray("children");
         Vector<ContentValues> cVVector = new Vector<ContentValues>(JOKES_COUNT);
 
-        for (int i = 0; i < JOKES_COUNT; i++) {
+        for (int i = 0; i < jokesArray.length(); i++) {
 
             JSONObject jokeObject = jokesArray.getJSONObject(i).getJSONObject("data");
             String jokeId = jokeObject.getString("id");

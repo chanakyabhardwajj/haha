@@ -1,9 +1,10 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:haha="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/action_share"
-        android:actionProviderClass="android.widget.ShareActionProvider"
+        haha:actionProviderClass="android.support.v7.widget.ShareActionProvider"
         android:icon="@drawable/ic_action_share"
         android:title="@string/action_share"
-        app:showAsAction="ifRoom" />
+        android:orderInCategory="10"
+        haha:showAsAction="always" />
 </menu>
