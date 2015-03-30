@@ -48,6 +48,11 @@ public class JokesDBHelper extends SQLiteOpenHelper {
         onCreate(sqLiteDatabase);
     }
 
+    public void deleteAll() {
+        final SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("delete from "+ JokesContract.JokesEntry.TABLE_NAME);
+    }
+
 
     public boolean jokeExistsInDB(String jokeId) {
         SQLiteDatabase db = this.getReadableDatabase();
@@ -76,7 +81,6 @@ public class JokesDBHelper extends SQLiteOpenHelper {
         return cursor.getCount();
     }
 
-
     public String lastJokeInDB() {
         SQLiteDatabase db = this.getReadableDatabase();
         String query = "Select * from " + JokesContract.JokesEntry.TABLE_NAME + " ORDER BY " + JokesContract.JokesEntry._ID + " DESC LIMIT 1";
@@ -90,6 +94,5 @@ public class JokesDBHelper extends SQLiteOpenHelper {
         } else {
             return null;
         }
-
     }
 }

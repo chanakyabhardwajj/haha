@@ -24,13 +24,13 @@ import java.util.Vector;
 /**
  * Created by cb on 3/9/15.
  */
-public class JokesFetchTask extends AsyncTask<Integer, Void, Void> {
+public class JokesFetchTask extends AsyncTask<Integer, Void, Boolean> {
     private final String LOG_TAG = JokesFetchTask.class.getSimpleName();
 
     private JokesDBHelper dbHelper;
     private final Context mContext;
     private final Integer JOKES_COUNT;
-    private boolean errorFlag = false;
+    private Exception error;
 
     public JokesFetchTask(Context context, int count) {
         mContext = context;
@@ -39,7 +39,7 @@ public class JokesFetchTask extends AsyncTask<Integer, Void, Void> {
     }
 
     @Override
-    protected Void doInBackground(Integer... params) {
+    protected Boolean doInBackground(Integer... params) {
         // These two need to be declared outside the try/catch
         // so that they can be closed in the finally block.
         HttpURLConnection urlConnection = null;
@@ -55,6 +55,9 @@ public class JokesFetchTask extends AsyncTask<Integer, Void, Void> {
             if (lastJokeId != null && !lastJokeId.isEmpty()) {
                 urlString = urlString + "&after=t3_" + lastJokeId;
             }
+
+            Log.v(LOG_TAG, "URL : " + urlString);
+
             URL url = new URL(urlString);
             urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setRequestMethod("GET");
@@ -82,10 +85,19 @@ public class JokesFetchTask extends AsyncTask<Integer, Void, Void> {
                 return null;
             }
             jokesJsonStr = buffer.toString();
+
+            try {
+                addRedditJokesFromJson(jokesJsonStr);
+            } catch (JSONException e) {
+                Log.e(LOG_TAG, e.getMessage(), e);
+                e.printStackTrace();
+            }
+
+            return true;
         } catch (IOException e) {
             Log.e(LOG_TAG, "Error", e);
-            errorFlag = true;
-            return null;
+            error = e;
+            return false;
         } finally {
             if (urlConnection != null) {
                 urlConnection.disconnect();
@@ -98,23 +110,14 @@ public class JokesFetchTask extends AsyncTask<Integer, Void, Void> {
                 }
             }
         }
-
-        try {
-            addRedditJokesFromJson(jokesJsonStr);
-        } catch (JSONException e) {
-            Log.e(LOG_TAG, e.getMessage(), e);
-            e.printStackTrace();
-        }
-
-        return null;
     }
 
     @Override
-    protected void onPostExecute(Void result) {
-        if (errorFlag) {
+    protected void onPostExecute(Boolean result) {
+        if (!result) {
             Toast.makeText(mContext, "No internet. No funny.", Toast.LENGTH_LONG).show();
+            Log.v(LOG_TAG, error.toString());
         }
-
     }
 
     /*Reddit joke parser*/
@@ -132,6 +135,8 @@ public class JokesFetchTask extends AsyncTask<Integer, Void, Void> {
             String jokeId = jokeObject.getString("id");
             String jokeTitle = jokeObject.getString("title");
             String jokeText = jokeObject.getString("selftext");
+
+            Log.v(LOG_TAG, "Joke : " + jokeTitle);
 
             ContentValues jokeValues = new ContentValues();
             jokeValues.put(JokesContract.JokesEntry.COLUMN_JOKE_ID, jokeId);

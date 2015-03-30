@@ -10,12 +10,18 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.ShareActionProvider;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.chanakyabhardwaj.haha.data.JokesContract;
+import com.chanakyabhardwaj.haha.data.JokesDBHelper;
 
 /**
  * Created by cb on 3/24/15.
@@ -33,6 +39,21 @@ public class MainActivity extends ActionBarActivity implements LoaderManager.Loa
         //Fetch only 10 jokes every time.
         //This will ensure that a user sees only 9 stale jokes upon her revisit.
         new JokesFetchTask(this, 10).execute();
+    }
+
+    private void reset() {
+        pageNumber = 0;
+        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putInt("pageNumber", pageNumber);
+        editor.commit();
+
+        JokesDBHelper dbHelper = new JokesDBHelper(getApplicationContext());
+        Log.v("Before Delete all", Integer.toString(dbHelper.jokesCountInDB()));
+        dbHelper.deleteAll();
+        Log.v("After Delete all", Integer.toString(dbHelper.jokesCountInDB()));
+
+        getSupportLoaderManager().restartLoader(0, null, this);
     }
 
     //Track the last joke the user was reading
@@ -124,6 +145,24 @@ public class MainActivity extends ActionBarActivity implements LoaderManager.Loa
                 }
             }
         });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_refresh:
+                reset();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     public class JokesPagerAdapter extends FragmentStatePagerAdapter {
