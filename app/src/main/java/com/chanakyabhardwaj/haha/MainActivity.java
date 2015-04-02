@@ -2,6 +2,8 @@ package com.chanakyabhardwaj.haha;
 
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -18,6 +20,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import com.chanakyabhardwaj.haha.data.JokesContract;
@@ -83,10 +86,14 @@ public class MainActivity extends ActionBarActivity implements LoaderManager.Loa
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        mJokesCursor = data;
-        JOKES_COUNT = mJokesCursor.getCount();
-        mJokesPagerAdapter.notifyDataSetChanged();
-        mViewPager.setCurrentItem(pageNumber);
+        if (data != null && mJokesCursor != data) {
+            mJokesCursor = data;
+            JOKES_COUNT = mJokesCursor.getCount();
+            if (JOKES_COUNT > 0) {
+                mJokesPagerAdapter.notifyDataSetChanged();
+                mViewPager.setCurrentItem(pageNumber);
+            }
+        }
     }
 
     @Override
@@ -120,7 +127,7 @@ public class MainActivity extends ActionBarActivity implements LoaderManager.Loa
         mViewPager = (ViewPager) findViewById(R.id.viewpager);
         mViewPager.setAdapter(mJokesPagerAdapter);
 
-        /*mViewPager.setPageTransformer(false, new ViewPager.PageTransformer() {
+        mViewPager.setPageTransformer(false, new ViewPager.PageTransformer() {
             @Override
             public void transformPage(View view, float position) {
                 view.setTranslationX(view.getWidth() * -position);
@@ -134,7 +141,7 @@ public class MainActivity extends ActionBarActivity implements LoaderManager.Loa
                     view.setAlpha(1.0F - Math.abs(position));
                 }
             }
-        });*/
+        });
 
         mViewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
             @Override
