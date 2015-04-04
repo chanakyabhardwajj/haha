@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="blue">#33B5E6</color>
+    <color name="blue">#62ABD4</color>
     <color name="red">#E60F30</color>
     <color name="orange">#FF6928</color>
     <color name="darkBlue">#06394D</color>
     <color name="black">#000000</color>
-    <color name="yellow">#ffeb3b</color>
+    <color name="yellow">#FEBC3E</color>
     <color name="grey">#555F6E</color>
     <color name="white">#FFFFFF</color>
 
@@ -14,9 +14,8 @@
     <color name="overlay">#60000000</color>
 
     <array name="backgrounds">
-        <item>@color/red</item>
         <item>@color/orange</item>
-        <item>@color/darkBlue</item>
-        <item>@color/black</item>
+        <item>@color/blue</item>
+        <item>@color/yellow</item>
     </array>
 </resources>

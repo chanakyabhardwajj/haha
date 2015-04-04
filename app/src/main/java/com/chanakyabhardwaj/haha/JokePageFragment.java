@@ -51,9 +51,7 @@ public class JokePageFragment extends Fragment {
         jokeTextView.setText(Html.fromHtml(jokeText));
 
         position = getArguments().getInt("position", 0);
-        RelativeLayout jokeLayout = (RelativeLayout) rootView.findViewById(R.id.joke_layout);
-
-        jokeLayout.setBackgroundColor(backgrounds[position % backgrounds.length]);
+        jokeTitleView.setBackgroundColor(backgrounds[position % backgrounds.length]);
 
         return rootView;
     }
