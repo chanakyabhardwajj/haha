@@ -50,7 +50,7 @@ public class JokesFetchTask extends AsyncTask<Integer, Void, Boolean> {
 
         try {
             String lastJokeId = dbHelper.lastJokeInDB();
-            String urlString = "https://www.reddit.com/r/jokes+meanjokes/.json?sort=hot&limit=" + JOKES_COUNT;
+            String urlString = "https://www.reddit.com/r/jokes/.json?sort=hot&limit=" + JOKES_COUNT;
 
             if (lastJokeId != null && !lastJokeId.isEmpty()) {
                 urlString = urlString + "&after=t3_" + lastJokeId;
