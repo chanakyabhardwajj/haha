@@ -52,9 +52,7 @@ public class MainActivity extends ActionBarActivity implements LoaderManager.Loa
         editor.commit();
 
         JokesDBHelper dbHelper = new JokesDBHelper(getApplicationContext());
-        Log.v("Before Delete all", Integer.toString(dbHelper.jokesCountInDB()));
         dbHelper.deleteAll();
-        Log.v("After Delete all", Integer.toString(dbHelper.jokesCountInDB()));
 
         getSupportLoaderManager().restartLoader(0, null, this);
     }

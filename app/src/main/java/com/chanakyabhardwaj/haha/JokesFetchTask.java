@@ -56,7 +56,7 @@ public class JokesFetchTask extends AsyncTask<Integer, Void, Boolean> {
                 urlString = urlString + "&after=t3_" + lastJokeId;
             }
 
-            Log.v(LOG_TAG, "URL : " + urlString);
+            //Log.v(LOG_TAG, "URL : " + urlString);
 
             URL url = new URL(urlString);
             urlConnection = (HttpURLConnection) url.openConnection();
@@ -116,7 +116,7 @@ public class JokesFetchTask extends AsyncTask<Integer, Void, Boolean> {
     protected void onPostExecute(Boolean result) {
         if (!result) {
             Toast.makeText(mContext, "No internet. No funny.", Toast.LENGTH_LONG).show();
-            Log.v(LOG_TAG, error.toString());
+            //Log.v(LOG_TAG, error.toString());
         }
     }
 
@@ -136,7 +136,7 @@ public class JokesFetchTask extends AsyncTask<Integer, Void, Boolean> {
             String jokeTitle = jokeObject.getString("title");
             String jokeText = jokeObject.getString("selftext");
 
-            Log.v(LOG_TAG, "Joke : " + jokeTitle);
+            //Log.v(LOG_TAG, "Joke : " + jokeTitle);
 
             ContentValues jokeValues = new ContentValues();
             jokeValues.put(JokesContract.JokesEntry.COLUMN_JOKE_ID, jokeId);
