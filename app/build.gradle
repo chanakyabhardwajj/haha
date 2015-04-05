@@ -6,10 +6,10 @@ android {
 
     defaultConfig {
         applicationId "com.chanakyabhardwaj.haha"
-        minSdkVersion 21
+        minSdkVersion 14
         targetSdkVersion 21
-        versionCode 1
-        versionName "1.0"
+        versionCode 3
+        versionName "alpha-dirty"
     }
     buildTypes {
         release {
